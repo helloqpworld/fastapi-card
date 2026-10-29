@@ -1,12 +1,12 @@
 from fastapi import HTTPException
-from sqlalchemy.orm import Session
 
+from app.database import SessionLocal # <-- Импортируем фабрику сессий
 from app.schemes import OperationRequest
 from app.repository import wallets as wallets_repository
 
 def add_income(operation: OperationRequest):
     # Проверить существует ли кошелек
-    db = Session()
+    db = SessionLocal() # <-- Создаем сессию, привязанную к БД
     try:
         if not wallets_repository.is_wallet_exist(db, operation.wallet_name):
             raise HTTPException(
@@ -30,7 +30,7 @@ def add_income(operation: OperationRequest):
 
 def add_expense(operation: OperationRequest):
     # Проверить существует ли кошелек
-    db = Session()
+    db = SessionLocal() # <-- Создаем сессию, привязанную к БД
     try:
         if not wallets_repository.is_wallet_exist(db, operation.wallet_name):
             raise HTTPException(
