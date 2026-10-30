@@ -41,3 +41,12 @@ class CreateWalletRequest(BaseModel):
         if v < 0:
             raise ValueError('Amouth must be positive')
         return v
+
+
+class UserRequest(BaseModel):
+    login: str = Field(..., max_length=64)
+
+class UserResponce(UserRequest):
+    model_config = {'from_attributes': True}
+
+    id: int
