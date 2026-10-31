@@ -10,3 +10,11 @@ dependencies = [
     "sqlalchemy==2.0.45",
     "uvicorn==0.38.0",
 ]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+# Скрываем предупреждения об устаревании из starlette и httpx
+filterwarnings = [
+    "ignore::DeprecationWarning:starlette.*",
+    "ignore::DeprecationWarning:httpx.*",
+]
