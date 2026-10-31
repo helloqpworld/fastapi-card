@@ -4,3 +4,8 @@ class CurrencyEnum(StrEnum):
     RUB = auto()
     USD = auto()
     EUR = auto()
+
+class OperationType(StrEnum):
+    EXPENSE = auto()
+    INCOME = auto()
+    TRANSFER = auto()

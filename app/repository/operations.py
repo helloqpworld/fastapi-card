@@ -38,8 +38,8 @@ def get_operations_list(
     query = db.query(Operation).filter(Operation.wallet_id.in_(wallets_ids))
     
     if date_from:
-        query = query.filter(Operation.create_at >= date_from)
+        query = query.filter(Operation.created_at >= date_from)
     if date_to:
-        query = query.filter(Operation.create_at <= date_to)
+        query = query.filter(Operation.created_at <= date_to)
 
     return query.all()

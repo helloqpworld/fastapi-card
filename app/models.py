@@ -33,4 +33,4 @@ class Operation(Base):
     currency: Mapped[CurrencyEnum]
     category: Mapped[str | None] = mapped_column(default=None)
     subcategory: Mapped[str | None] = mapped_column(default=None)
-    create_at: Mapped[datetime] = mapped_column(default=lambda: datetime.now())
+    created_at: Mapped[datetime] = mapped_column(default=lambda: datetime.now())
