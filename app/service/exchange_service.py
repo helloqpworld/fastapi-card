@@ -1,3 +1,5 @@
+import aiohttp
+import requests
 from decimal import Decimal
 from typing import Dict, Tuple
 
@@ -13,6 +15,28 @@ FALLBACK_RATES: Dict[Tuple[str, str], Decimal] = {
     (CurrencyEnum.EUR, CurrencyEnum.USD): Decimal(str(1.087)),
 }
 
+FALLBACK_RATES_SCHEMS: Dict[Tuple[str, str], str] = {
+    (CurrencyEnum.USD, CurrencyEnum.RUB): "USD_RUB_in",
+    (CurrencyEnum.USD, CurrencyEnum.EUR): "USD_EUR_in",
+    (CurrencyEnum.RUB, CurrencyEnum.USD): "USD_RUB_out",
+    (CurrencyEnum.RUB, CurrencyEnum.EUR): "RUB_EUR_in",
+    (CurrencyEnum.EUR, CurrencyEnum.RUB): "RUB_EUR_out",
+    (CurrencyEnum.EUR, CurrencyEnum.USD): "USD_EUR_out",
+}
 
-def get_exchange_rate(base: CurrencyEnum, target: CurrencyEnum) -> Decimal:
-    return FALLBACK_RATES.get((base, target), Decimal(1))
+
+async def get_exchange_rate(base: CurrencyEnum, target: CurrencyEnum) -> Decimal:
+    url = "https://belarusbank.by/api/kursExchange"
+    timeout = aiohttp.ClientTimeout(total=5.0)
+    params = {"city": "Брест"}
+    try:
+        async with aiohttp.ClientSession(timeout=timeout) as session:
+            async with session.get(url, params=params) as response:
+                response.raise_for_status()
+                data = await response.json()
+                data = data[0]
+                res = FALLBACK_RATES_SCHEMS.get((base, target), Decimal(1))
+        return Decimal(data[res])
+
+    except Exception:
+        return FALLBACK_RATES.get((base, target), Decimal(1))

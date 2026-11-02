@@ -21,7 +21,7 @@ def get_wallet_balance_by_name(db: Session, user_id: int, wallet_name: str) -> W
     return db.query(Wallet).filter(Wallet.name == wallet_name, Wallet.user_id == user_id).first()
 
 def get_all_wallets(db: Session, user_id: int) -> list[Wallet]:
-    return db.query(Wallet).filter(User.id == user_id).all()
+    return db.query(Wallet).filter(Wallet.id == user_id).all()
 
 def create_new_wallet(db: Session, user_id: int, wallet_name: str, amount: Decimal, currency: CurrencyEnum) -> Wallet:
     wallet = Wallet(name=wallet_name, balance=amount, user_id=user_id, currency=currency)
